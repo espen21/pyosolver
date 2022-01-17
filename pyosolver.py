@@ -35,6 +35,7 @@ class PYOSolver(object):
 		self.cfr_file_path = cfr_file_path
 		self._run("load_tree", cfr_file_path)
 		root_node_info = self.show_node("r")
+		print(cfr_file_path)
 		self.set_eff_stack(self.show_effective_stack())
 		self._run("set_isomorphism", "1 0")
 		self.set_pot(*root_node_info["pot"])
@@ -155,7 +156,10 @@ class PYOSolver(object):
 
 	def show_strategy(self, node_id):
 		return self._run("show_strategy", node_id).split("\n")
-		
+	
+	def show_strategy_pp(self, node_id):
+		return self._run("show_strategy_pp", node_id).split("\n")
+	
 	def _parse_data(self, data, *name_to_parser):
 		parsed_data = {}
 		for i, data_line in enumerate(data.split("\n")):
@@ -261,7 +265,8 @@ def guess_type(key, data_string):
 	if data_string == "False":
 		return False
 	if "Config" in key and "Size" in key:
-		return [int(a) for a in data_string.split(",")]
+		
+		return [a for a in data_string.split(",")]
 	if "Range" in key:
 		return data_string.split(",")
 	if "Board" == key:
