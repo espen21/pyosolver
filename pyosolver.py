@@ -1,3 +1,4 @@
+from math import comb
 import subprocess
 import os
 import time
@@ -11,7 +12,7 @@ class PYOSolver(object):
 		self.cfr_file_path = None
 		self.solver_path = path
 		self.executable_name = executable_name
-		rand_name = str(uuid4())
+		rand_name = "Pio_solver_output.txt"
 		self.fw = open("tmpout" + rand_name, "wb")
 		self.fr = open("tmpout" + rand_name, "r")
 		self.process = subprocess.Popen(
@@ -35,7 +36,6 @@ class PYOSolver(object):
 		self.cfr_file_path = cfr_file_path
 		self._run("load_tree", cfr_file_path)
 		root_node_info = self.show_node("r")
-		print(cfr_file_path)
 		self.set_eff_stack(self.show_effective_stack())
 		self._run("set_isomorphism", "1 0")
 		self.set_pot(*root_node_info["pot"])
@@ -117,11 +117,11 @@ class PYOSolver(object):
 
 	def calc_ev(self, position, node):
 		results = self._run("calc_ev_pp", position, node)
+		combo_ev = []
+		 
 		for r in results.split("\n"):
-			if "EV: " in r:
-				return Decimal(r.split(": ")[1])
-		return None
-
+			combo_ev.append(r)
+		return combo_ev
 	def solve_partial(self, node_id):
 		return self._run("solve_partial", node_id)
 
